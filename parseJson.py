@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-
-import json
 import sys
-
-# Global Variables
-match = None
-replace = None
-folder = None 
+import json
+import csv
 
 
 def main():
@@ -14,8 +9,11 @@ def main():
     data = readJson()
     # Decode the json in dictonary
     obj = json.loads(data)
-    list = makeList(obj)
-    
+    # Create list from dictonarys keys of x letter words
+    list = makeList(obj, 4)
+    saveCsv(list)
+
+
     return 0
 
 # reads the json file
@@ -25,15 +23,19 @@ def readJson():
 
     return data
 
-def makeList(data):
+def makeList(data, length):
     list = []
     
     for key in data.keys():
-        if len(key) == 4:
-            print(key)
+        if len(key) == length:
             list.append(key)
 
     return list
+
+def saveCsv(list):
+    with open('wordlist.csv', 'w') as wordlist:
+        wr = csv.writer(wordlist, quoting=csv.QUOTE_ALL)
+        wr.writerow(list)
 
 
 # Maincontrol
